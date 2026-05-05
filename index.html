@@ -45,6 +45,14 @@
       color: var(--light-gold);
       text-decoration: none;
       letter-spacing: .3px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo img {
+      height: 42px;
+      width: auto;
+      filter: drop-shadow(0 1px 3px rgba(0,0,0,.3));
     }
     .nav-links { display: flex; gap: 28px; list-style: none; }
     .nav-links a {
@@ -66,15 +74,12 @@
       position: relative;
       overflow: hidden;
     }
-    .hero::before {
-      content: "🐟🍞";
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 6rem;
-      opacity: .07;
-      pointer-events: none;
+    .hero-logo {
+      width: 220px;
+      height: auto;
+      margin: 0 auto 28px;
+      display: block;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,.4));
     }
     .hero-tag {
       display: inline-block;
@@ -360,7 +365,10 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="#">🐟 Fishes & Loaves</a>
+    <a class="nav-logo" href="#">
+      <img src="logo.png" alt="Fishes & Loaves logo" />
+      Fishes & Loaves
+    </a>
     <ul class="nav-links">
       <li><a href="#hours">Hours</a></li>
       <li><a href="#about">About</a></li>
@@ -377,6 +385,7 @@
 
   <!-- HERO -->
   <header class="hero">
+    <img src="logo.png" alt="Fishes & Loaves" class="hero-logo" />
     <div class="hero-tag">Emergency Food Pantry · Colorado Springs, CO</div>
     <h1>No one should go<br /><span>hungry in our community.</span></h1>
     <p>Fishes & Loaves provides free groceries and emergency food assistance to families and individuals in need — no paperwork, no judgment, just help.</p>
