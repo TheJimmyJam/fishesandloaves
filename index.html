@@ -311,25 +311,165 @@
     }
     .faq-item.open .faq-a { max-height: 300px; padding-top: 14px; }
 
-    /* ── GET INVOLVED ── */
-    .involve-grid {
+    /* ── DONATE WIDGET ── */
+    .donate-section { background: linear-gradient(160deg, #2E1A0E 0%, #4A2E14 60%, #1C3A20 100%); color: var(--white); }
+    .donate-section .section-label { color: var(--light-gold); }
+    .donate-section .section-title { color: var(--white); }
+    .donate-section .section-sub { color: rgba(255,255,255,.72); }
+
+    .donate-widget {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 40px 44px;
+      max-width: 680px;
+      margin: 44px auto 0;
+      box-shadow: 0 24px 60px rgba(0,0,0,.35);
+      color: var(--text);
+    }
+    @media (max-width: 700px) { .donate-widget { padding: 28px 20px; } }
+
+    /* frequency toggle */
+    .freq-toggle {
+      display: flex;
+      background: #F0EAE1;
+      border-radius: 40px;
+      padding: 4px;
+      margin-bottom: 28px;
+      width: fit-content;
+    }
+    .freq-btn {
+      padding: 9px 28px;
+      border-radius: 40px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      transition: background .2s, color .2s;
+    }
+    .freq-btn.active { background: var(--warm-brown); color: var(--white); }
+
+    /* amount grid */
+    .amount-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      margin-top: 44px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
     }
-    @media (max-width: 700px) { .involve-grid { grid-template-columns: 1fr; } }
-    .involve-card {
+    @media (max-width: 500px) { .amount-grid { grid-template-columns: repeat(2, 1fr); } }
+    .amount-tile {
+      border: 2px solid #E0D5C8;
       border-radius: 12px;
-      padding: 36px 32px;
-      color: var(--white);
+      padding: 16px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, transform .15s;
+      background: var(--white);
+      user-select: none;
     }
-    .involve-card.donate { background: linear-gradient(135deg, var(--warm-brown), var(--gold)); }
-    .involve-card.volunteer { background: linear-gradient(135deg, var(--green), #3A6642); }
-    .involve-card h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 12px; }
-    .involve-card p { font-size: .95rem; line-height: 1.7; opacity: .9; margin-bottom: 24px; }
-    .btn-white { background: var(--white); color: var(--warm-brown); font-weight: 700; }
-    .involve-card.volunteer .btn-white { color: var(--green); }
+    .amount-tile:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .amount-tile.selected { border-color: var(--gold); background: #FDF6EA; }
+    .amount-tile .tile-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--warm-brown);
+      display: block;
+      line-height: 1.1;
+    }
+    .amount-tile .tile-impact {
+      font-size: .73rem;
+      color: var(--muted);
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+    .amount-tile.selected .tile-impact { color: var(--gold); }
+    .amount-tile.custom-tile .tile-amount { font-size: 1.1rem; }
+
+    /* custom input */
+    .custom-input-wrap {
+      display: none;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .custom-input-wrap.visible { display: block; }
+    .custom-input-wrap span {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--warm-brown);
+    }
+    .custom-input-wrap input {
+      width: 100%;
+      padding: 14px 16px 14px 32px;
+      border: 2px solid var(--gold);
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      color: var(--dark);
+      outline: none;
+    }
+
+    /* impact bar */
+    .impact-bar {
+      background: linear-gradient(135deg, #FDF1DC, #FBE8C3);
+      border: 1px solid #F0D8A0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 64px;
+    }
+    .impact-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .impact-text { font-size: .95rem; line-height: 1.5; color: var(--dark); }
+    .impact-text strong { color: var(--warm-brown); }
+
+    /* donate btn */
+    .donate-submit {
+      width: 100%;
+      padding: 17px;
+      background: linear-gradient(135deg, var(--warm-brown), var(--gold));
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: .3px;
+      transition: opacity .2s, transform .15s;
+    }
+    .donate-submit:hover { opacity: .92; transform: translateY(-2px); }
+    .donate-note {
+      text-align: center;
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+    .donate-note a { color: var(--gold); }
+
+    /* volunteer strip */
+    .volunteer-strip {
+      background: linear-gradient(135deg, var(--green), #3A6642);
+      border-radius: 14px;
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .volunteer-strip h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--white); margin-bottom: 6px; }
+    .volunteer-strip p { font-size: .93rem; color: rgba(255,255,255,.8); }
+    .btn-white { background: var(--white); color: var(--green); font-weight: 700; flex-shrink: 0; }
 
     /* ── CONTACT ── */
     .contact-inner {
@@ -374,6 +514,7 @@
       <li><a href="#about">About</a></li>
       <li><a href="#howit">How It Works</a></li>
       <li><a href="#faq">FAQ</a></li>
+      <li><a href="#donate" style="color:var(--light-gold); font-weight:700;">Donate</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
@@ -569,23 +710,77 @@
     </div>
   </section>
 
-  <!-- GET INVOLVED -->
-  <section id="involve">
-    <div class="container">
-      <div class="section-label">Support the Mission</div>
-      <h2 class="section-title">Get Involved</h2>
-      <p class="section-sub">Fishes & Loaves runs on generosity. Whether you give your time or your resources, it makes a real difference.</p>
-      <div class="involve-grid">
-        <div class="involve-card donate">
-          <h3>Donate Food or Funds</h3>
-          <p>Every dollar and every can makes a difference. Your donation helps us keep the shelves stocked every Saturday for families in need across Colorado Springs.</p>
-          <a href="#contact" class="btn btn-white">Donate Now</a>
+  <!-- DONATE -->
+  <section id="donate" class="donate-section">
+    <div class="container" style="text-align:center;">
+      <div class="section-label">Make a Difference</div>
+      <h2 class="section-title">Every Dollar Feeds a Neighbor</h2>
+      <p class="section-sub" style="margin:0 auto;">Based on Care & Share Food Bank's model, <strong style="color:var(--light-gold);">$1 provides approximately 5 meals</strong> for families right here in Colorado Springs.</p>
+
+      <div class="donate-widget">
+
+        <!-- Frequency toggle -->
+        <div class="freq-toggle">
+          <button class="freq-btn active" onclick="setFreq('one-time', this)">Give Once</button>
+          <button class="freq-btn" onclick="setFreq('monthly', this)">Give Monthly</button>
         </div>
-        <div class="involve-card volunteer">
+
+        <!-- Amount tiles -->
+        <div class="amount-grid">
+          <div class="amount-tile" onclick="selectAmount(10, this)">
+            <span class="tile-amount">$10</span>
+            <div class="tile-impact">50 meals for families in need</div>
+          </div>
+          <div class="amount-tile selected" onclick="selectAmount(25, this)">
+            <span class="tile-amount">$25</span>
+            <div class="tile-impact">Feeds a family of 4 for a week</div>
+          </div>
+          <div class="amount-tile" onclick="selectAmount(50, this)">
+            <span class="tile-amount">$50</span>
+            <div class="tile-impact">250 meals — half a Saturday distribution</div>
+          </div>
+          <div class="amount-tile" onclick="selectAmount(100, this)">
+            <span class="tile-amount">$100</span>
+            <div class="tile-impact">500 meals — a month of food for a family</div>
+          </div>
+          <div class="amount-tile" onclick="selectAmount(250, this)">
+            <span class="tile-amount">$250</span>
+            <div class="tile-impact">1,250 meals — stocks our pantry for a month</div>
+          </div>
+          <div class="amount-tile custom-tile" onclick="selectAmount('custom', this)">
+            <span class="tile-amount">Custom</span>
+            <div class="tile-impact">Choose your own amount</div>
+          </div>
+        </div>
+
+        <!-- Custom input -->
+        <div class="custom-input-wrap" id="custom-wrap">
+          <span>$</span>
+          <input type="number" id="custom-amount" min="1" placeholder="Enter amount" oninput="updateCustomImpact(this.value)" />
+        </div>
+
+        <!-- Impact statement -->
+        <div class="impact-bar">
+          <div class="impact-icon">🍞</div>
+          <div class="impact-text" id="impact-text">
+            <strong>Your $25 gift</strong> provides <strong>125 meals</strong> — enough to feed a family of 4 for an entire week.
+          </div>
+        </div>
+
+        <!-- Donate button -->
+        <button class="donate-submit" onclick="handleDonate()">
+          Donate <span id="donate-amount-label">$25</span> Now →
+        </button>
+        <p class="donate-note">Fishes &amp; Loaves is a 501(c)(3) nonprofit. Your donation may be tax-deductible. &nbsp;|&nbsp; <a href="#contact">Questions? Contact us.</a></p>
+      </div>
+
+      <!-- Volunteer strip -->
+      <div class="volunteer-strip">
+        <div>
           <h3>Volunteer With Us</h3>
-          <p>We need volunteers every Saturday morning. Help with setup, distribution, and breakdown. No experience necessary — just a willing heart and a couple of hours.</p>
-          <a href="#contact" class="btn btn-white">Sign Up to Volunteer</a>
+          <p>Show up Saturday morning. No experience needed — just a willing heart and a couple of hours.</p>
         </div>
+        <a href="#contact" class="btn btn-white">Sign Up to Volunteer</a>
       </div>
     </div>
   </section>
@@ -669,6 +864,77 @@
       e.preventDefault();
       e.target.style.display = 'none';
       document.getElementById('form-success').style.display = 'block';
+    }
+
+    // ── DONATE WIDGET ──
+    const impacts = {
+      10:  { meals: 50,    text: 'Your <strong>$10 gift</strong> provides <strong>50 meals</strong> for neighbors facing hunger in Colorado Springs.' },
+      25:  { meals: 125,   text: 'Your <strong>$25 gift</strong> provides <strong>125 meals</strong> — enough to feed a family of 4 for an entire week.' },
+      50:  { meals: 250,   text: 'Your <strong>$50 gift</strong> provides <strong>250 meals</strong> — covering half of one of our Saturday distributions.' },
+      100: { meals: 500,   text: 'Your <strong>$100 gift</strong> provides <strong>500 meals</strong> — a full month of food for a family in need.' },
+      250: { meals: 1250,  text: 'Your <strong>$250 gift</strong> provides <strong>1,250 meals</strong> — stocking our pantry for an entire month of Saturdays.' },
+    };
+
+    let currentAmount = 25;
+    let currentFreq = 'one-time';
+
+    function selectAmount(val, el) {
+      document.querySelectorAll('.amount-tile').forEach(t => t.classList.remove('selected'));
+      el.classList.add('selected');
+      const wrap = document.getElementById('custom-wrap');
+      if (val === 'custom') {
+        wrap.classList.add('visible');
+        const cv = document.getElementById('custom-amount').value;
+        currentAmount = cv ? parseFloat(cv) : null;
+        updateCustomImpact(cv);
+      } else {
+        wrap.classList.remove('visible');
+        currentAmount = val;
+        setImpact(val);
+        document.getElementById('donate-amount-label').textContent = '$' + val;
+      }
+    }
+
+    function setImpact(val) {
+      const box = document.getElementById('impact-text');
+      if (impacts[val]) {
+        box.innerHTML = impacts[val].text;
+      }
+    }
+
+    function updateCustomImpact(val) {
+      const n = parseFloat(val);
+      const box = document.getElementById('impact-text');
+      if (!n || n <= 0) {
+        box.innerHTML = 'Enter an amount above to see your impact.';
+        document.getElementById('donate-amount-label').textContent = '';
+        currentAmount = null;
+        return;
+      }
+      currentAmount = n;
+      const meals = Math.round(n * 5);
+      document.getElementById('donate-amount-label').textContent = '$' + n.toFixed(0);
+      if (n < 10) {
+        box.innerHTML = `Your <strong>$${n.toFixed(0)} gift</strong> provides <strong>${meals} meals</strong> — every dollar counts!`;
+      } else if (n < 25) {
+        box.innerHTML = `Your <strong>$${n.toFixed(0)} gift</strong> provides <strong>${meals} meals</strong> for families in Colorado Springs.`;
+      } else if (n < 100) {
+        box.innerHTML = `Your <strong>$${n.toFixed(0)} gift</strong> provides <strong>${meals.toLocaleString()} meals</strong> — making a real difference this Saturday.`;
+      } else {
+        box.innerHTML = `Your <strong>$${n.toFixed(0)} gift</strong> provides <strong>${meals.toLocaleString()} meals</strong> — an extraordinary act of generosity. Thank you.`;
+      }
+    }
+
+    function setFreq(freq, el) {
+      currentFreq = freq;
+      document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function handleDonate() {
+      if (!currentAmount) { alert('Please enter a donation amount.'); return; }
+      // TODO: wire up to payment processor (Stripe, PayPal, etc.)
+      alert('Thank you for your generosity! Payment processing coming soon. In the meantime, please contact us directly to donate.');
     }
 
     // Smooth scroll for nav links
