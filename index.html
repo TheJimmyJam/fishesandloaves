@@ -25,6 +25,7 @@
       font-family: 'Inter', sans-serif;
       color: var(--text);
       background: var(--white);
+      overflow-x: hidden;
     }
 
     /* ── NAV ── */
@@ -736,56 +737,123 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    // ── Mission Quote: scale 0.15 → 1, scrubbed directly to scroll ──
-    gsap.fromTo('#missionQuote',
-      { scale: 0.15, opacity: 0 },
-      {
-        scale: 1, opacity: 1, ease: 'none',
-        scrollTrigger: {
-          trigger: '.mission-quote-section',
-          start: 'top 85%',
-          end: 'center center',
-          scrub: 1.2,
-        }
-      }
-    );
-    gsap.fromTo('.mission-quote-rule',
-      { scaleX: 0, opacity: 0 },
-      {
-        scaleX: 1, opacity: 1, ease: 'none',
-        scrollTrigger: {
-          trigger: '.mission-quote-section',
-          start: 'center 65%',
-          end: 'center 35%',
-          scrub: 1,
-        }
-      }
-    );
+    // ── 1. NAV — slide down on load ──
+    gsap.from('nav', { y: -70, opacity: 0, duration: 0.9, ease: 'power3.out' });
+    gsap.from('.banner', { opacity: 0, y: -10, duration: 0.6, delay: 0.5, ease: 'power2.out' });
 
-    // ── Hours & Location cards: fly in/out scrubbed to scroll ──
+    // ── 2. HERO — word-by-word h1 reveal, then stagger up rest ──
+    function wrapWords(el) {
+      el.childNodes.forEach(node => {
+        if (node.nodeType === 3) {
+          const words = node.textContent.split(/(\s+)/);
+          const frag = document.createDocumentFragment();
+          words.forEach(w => {
+            if (w.trim()) {
+              const s = document.createElement('span');
+              s.className = 'gsap-word';
+              s.style.cssText = 'display:inline-block;';
+              s.textContent = w;
+              frag.appendChild(s);
+            } else if (w) {
+              frag.appendChild(document.createTextNode(w));
+            }
+          });
+          el.replaceChild(frag, node);
+        } else if (node.nodeType === 1 && node.tagName !== 'BR') {
+          wrapWords(node);
+        }
+      });
+    }
+    wrapWords(document.querySelector('.hero h1'));
+    gsap.from('.hero-tag', { opacity: 0, y: 15, duration: 0.6, delay: 0.2, ease: 'power2.out' });
+    gsap.from('.gsap-word', {
+      opacity: 0, filter: 'blur(6px)', y: 18,
+      duration: 0.65, stagger: 0.07, delay: 0.35, ease: 'power2.out'
+    });
+    gsap.from('.hero p', { opacity: 0, y: 20, duration: 0.7, delay: 1.1, ease: 'power2.out' });
+    gsap.from('.hero-ctas', { opacity: 0, y: 20, duration: 0.7, delay: 1.3, ease: 'power2.out' });
+
+    // ── 3. HOURS & LOCATION — fly in from right, scrubbed ──
     gsap.fromTo('#hoursCard',
       { x: 700, opacity: 0 },
-      {
-        x: 0, opacity: 1, ease: 'none',
-        scrollTrigger: {
-          trigger: '#hours',
-          start: 'top 90%',
-          end: 'top 25%',
-          scrub: 1,
-        }
-      }
+      { x: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#hours', start: 'top 90%', end: 'top 25%', scrub: 1 } }
     );
     gsap.fromTo('#locationCard',
       { x: 700, opacity: 0 },
-      {
-        x: 0, opacity: 1, ease: 'none',
-        scrollTrigger: {
-          trigger: '#hours',
-          start: 'top 80%',
-          end: 'top 15%',
-          scrub: 1,
-        }
-      }
+      { x: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#hours', start: 'top 80%', end: 'top 15%', scrub: 1 } }
+    );
+
+    // ── 4. ABOUT — visual from left, copy from right, scrubbed ──
+    gsap.fromTo('.about-visual',
+      { x: -90, opacity: 0 },
+      { x: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#about', start: 'top 85%', end: 'top 25%', scrub: 1 } }
+    );
+    gsap.fromTo('.about-copy',
+      { x: 90, opacity: 0 },
+      { x: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#about', start: 'top 85%', end: 'top 25%', scrub: 1 } }
+    );
+
+    // ── 5. MISSION QUOTE — scale 0.15 → 1, scrubbed ──
+    gsap.fromTo('#missionQuote',
+      { scale: 0.15, opacity: 0 },
+      { scale: 1, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '.mission-quote-section', start: 'top 85%', end: 'center center', scrub: 1.2 } }
+    );
+    gsap.fromTo('.mission-quote-rule',
+      { scaleX: 0, opacity: 0 },
+      { scaleX: 1, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '.mission-quote-section', start: 'center 65%', end: 'center 35%', scrub: 1 } }
+    );
+
+    // ── 6. HOW IT WORKS — 3 step cards stagger up, scrubbed ──
+    gsap.fromTo('.step-card',
+      { y: 70, opacity: 0 },
+      { y: 0, opacity: 1, ease: 'none',
+        stagger: { each: 0.15 },
+        scrollTrigger: { trigger: '#howit', start: 'top 80%', end: 'top 15%', scrub: 1 } }
+    );
+
+    // ── 7. FAQ — rows slide up staggered, scrubbed ──
+    gsap.fromTo('.faq-item',
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, ease: 'none',
+        stagger: { each: 0.07 },
+        scrollTrigger: { trigger: '#faq', start: 'top 85%', end: 'center 30%', scrub: 1 } }
+    );
+
+    // ── 8. GET INVOLVED — donate from left, volunteer from right ──
+    gsap.fromTo('.involve-card.donate',
+      { x: -90, opacity: 0 },
+      { x: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#involve', start: 'top 80%', end: 'top 20%', scrub: 1 } }
+    );
+    gsap.fromTo('.involve-card.volunteer',
+      { x: 90, opacity: 0 },
+      { x: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#involve', start: 'top 80%', end: 'top 20%', scrub: 1 } }
+    );
+
+    // ── 9. CONTACT — info column from left, form from right ──
+    gsap.fromTo('#contact .contact-inner > div:first-child',
+      { x: -70, opacity: 0 },
+      { x: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#contact', start: 'top 85%', end: 'top 20%', scrub: 1 } }
+    );
+    gsap.fromTo('#contact .contact-inner > div:last-child',
+      { x: 70, opacity: 0 },
+      { x: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: '#contact', start: 'top 85%', end: 'top 20%', scrub: 1 } }
+    );
+
+    // ── 10. FOOTER — fade up ──
+    gsap.fromTo('footer',
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: 'footer', start: 'top 95%', end: 'top 60%', scrub: 1 } }
     );
   </script>
 </body>
