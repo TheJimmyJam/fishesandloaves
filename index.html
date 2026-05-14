@@ -832,12 +832,12 @@
         scrollTrigger: { trigger: '.mission-quote-section', start: 'center 65%', end: 'center 35%', scrub: 1 } }
     );
 
-    // ── 6. HOW IT WORKS — 3 step cards stagger up, scrubbed ──
+    // ── 6. HOW IT WORKS — cards float in from left, land at their columns ──
     gsap.fromTo('.step-card',
-      { y: 70, opacity: 0 },
-      { y: 0, opacity: 1, ease: 'none',
-        stagger: { each: 0.15 },
-        scrollTrigger: { trigger: '#howit', start: 'top 80%', end: 'top 15%', scrub: 1 } }
+      { x: '-110vw', opacity: 0 },
+      { x: 0, opacity: 1, duration: 1.6, ease: 'power2.out',
+        stagger: { each: 0.35 },
+        scrollTrigger: { trigger: '#howit', start: 'top 72%', toggleActions: 'play none none none' } }
     );
 
     // ── 7. FAQ — rows slide up staggered, scrubbed ──
