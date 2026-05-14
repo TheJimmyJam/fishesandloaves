@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Fishes & Loaves Emergency Food Pantry – Colorado Springs, CO</title>
   <meta name="description" content="Fishes & Loaves Emergency Food Pantry serves the Colorado Springs community with emergency food assistance every Saturday from 10 AM to 12 PM. No appointment needed." />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -21,11 +21,14 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
     body {
       font-family: 'Inter', sans-serif;
       color: var(--text);
       background: var(--white);
-      overflow-x: hidden;
     }
 
     /* ── NAV ── */
@@ -57,6 +60,51 @@
       transition: color .2s;
     }
     .nav-links a:hover { color: var(--light-gold); }
+
+    /* ── HAMBURGER ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--light-gold);
+      border-radius: 2px;
+      transition: transform .25s, opacity .25s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 700px) {
+      nav { padding: 14px 20px; }
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: var(--warm-brown);
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 0 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,.3);
+        z-index: 99;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li a {
+        display: block;
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+    }
 
     /* ── HERO ── */
     .hero {
@@ -417,8 +465,11 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="#"><img src="logo-assets/fishes and loaves update logo.png" alt="Fishes & Loaves" style="height:36px; vertical-align:middle; margin-right:8px;">Fishes & Loaves</a>
-    <ul class="nav-links">
+    <a class="nav-logo" href="#"><img src="logo-assets/fishes and loaves update logo.png" alt="Fishes & Loaves" style="height:40px; vertical-align:middle;"></a>
+    <button class="nav-hamburger" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
       <li><a href="#hours">Hours</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#howit">How It Works</a></li>
@@ -737,6 +788,21 @@
       e.target.style.display = 'none';
       document.getElementById('form-success').style.display = 'block';
     }
+
+    // Hamburger toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    // Close menu when a nav link is clicked
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navToggle.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
 
     // Smooth scroll for nav links
     document.querySelectorAll('a[href^="#"]').forEach(a => {
