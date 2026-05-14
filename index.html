@@ -354,6 +354,80 @@
       font-size: .85rem;
     }
     footer strong { color: var(--light-gold); }
+
+    /* ── MISSION QUOTE SECTION ── */
+    .mission-quote-section {
+      background: var(--warm-brown);
+      padding: 120px 24px;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .mission-quote-section::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(200,130,42,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .mission-quote-inner {
+      max-width: 820px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .mission-quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 8rem;
+      line-height: 0.5;
+      color: var(--gold);
+      opacity: 0.45;
+      display: block;
+      margin-bottom: 24px;
+      user-select: none;
+    }
+    .mission-quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      transform: scale(0.78);
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+      will-change: transform, opacity;
+    }
+    .mission-quote-text.quote-visible {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .mission-quote-rule {
+      display: block;
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      margin: 36px auto 0;
+      border-radius: 2px;
+      opacity: 0;
+      transform: scaleX(0);
+      transition: opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s;
+      transform-origin: center;
+    }
+    .mission-quote-text.quote-visible ~ .mission-quote-rule {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    /* ── FLY-IN FROM RIGHT ── */
+    [data-fly-right] {
+      opacity: 0;
+      transform: translateX(80px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+      transition-delay: var(--fly-delay, 0s);
+    }
+    [data-fly-right][data-visible] {
+      opacity: 1;
+      transform: translateX(0);
+    }
   </style>
 </head>
 <body>
@@ -394,7 +468,7 @@
       <p class="section-sub">We're open once a week. Come as you are — no appointment, no registration required.</p>
 
       <div class="info-grid">
-        <div class="info-card">
+        <div class="info-card" data-fly-right style="--fly-delay: 0s">
           <h3>🕙 Hours</h3>
           <table class="hours-table">
             <tr><td>Monday</td><td>Closed</td></tr>
@@ -409,7 +483,7 @@
             <tr><td>Sunday</td><td>Closed</td></tr>
           </table>
         </div>
-        <div class="info-card">
+        <div class="info-card" data-fly-right style="--fly-delay: 0.18s">
           <h3>📍 Location</h3>
           <p style="font-size:1.05rem; font-weight:600; color:var(--dark); margin-bottom:8px;">2221 N Wahsatch Ave</p>
           <p style="font-size:1rem; color:var(--muted); margin-bottom:4px;">Colorado Springs, CO 80907</p>
@@ -438,6 +512,15 @@
           <p>We are a faith-based community resource open to everyone regardless of background, faith, or circumstance.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- MISSION QUOTE -->
+  <section class="mission-quote-section">
+    <div class="mission-quote-inner">
+      <span class="mission-quote-mark">"</span>
+      <p class="mission-quote-text" id="missionQuote">Inspired by the miracles of our Lord and Savior Jesus Christ, where a few loaves and fishes fed the multitudes, we believe in sharing with those in need.</p>
+      <span class="mission-quote-rule"></span>
     </div>
   </section>
 
@@ -671,5 +754,32 @@
     });
   </script>
 
+
+  <script>
+    // Scroll-driven scale — Mission Quote
+    const quoteEl = document.getElementById('missionQuote');
+    const quoteObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          quoteEl.classList.add('quote-visible');
+          quoteObs.unobserve(quoteEl);
+        }
+      });
+    }, { threshold: 0.3 });
+    quoteObs.observe(quoteEl);
+  </script>
+
+  <script>
+    // Fly-in from right — Hours & Location cards
+    const flyObs = new IntersectionObserver(entries => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.setAttribute('data-visible', '');
+          flyObs.unobserve(el.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('[data-fly-right]').forEach(el => flyObs.observe(el));
+  </script>
 </body>
 </html>
