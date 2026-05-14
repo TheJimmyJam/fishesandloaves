@@ -834,51 +834,24 @@
     gsap.from('nav', { y: -70, opacity: 0, duration: 0.9, ease: 'power3.out' });
     gsap.from('.banner', { opacity: 0, y: -10, duration: 0.6, delay: 0.5, ease: 'power2.out' });
 
-    // ── 2. HERO — word-by-word h1 reveal, then stagger up rest ──
-    function wrapWords(el) {
-      el.childNodes.forEach(node => {
-        if (node.nodeType === 3) {
-          const words = node.textContent.split(/(\s+)/);
-          const frag = document.createDocumentFragment();
-          words.forEach(w => {
-            if (w.trim()) {
-              const s = document.createElement('span');
-              s.className = 'gsap-word';
-              s.style.cssText = 'display:inline-block;';
-              s.textContent = w;
-              frag.appendChild(s);
-            } else if (w) {
-              frag.appendChild(document.createTextNode(w));
-            }
-          });
-          el.replaceChild(frag, node);
-        } else if (node.nodeType === 1 && node.tagName !== 'BR') {
-          wrapWords(node);
-        }
-      });
-    }
-    wrapWords(document.querySelector('.hero h1'));
-    // Logo drops in with elastic bounce
+    // ── 2. HERO — clean stagger up on load ──
     gsap.from('.hero-logo-img', {
       opacity: 0, scale: 0.55, y: -20,
       duration: 1.1, delay: 0.1, ease: 'back.out(1.6)'
     });
-    // Glow blooms in after logo lands
     gsap.to('.hero-logo-img', {
       filter: 'drop-shadow(0 0 32px rgba(220,170,60,0.65))',
       duration: 0.9, delay: 0.95, ease: 'power2.out'
     });
-    // Subtitle letter-spacing collapses in (wide → tight) as it fades up
     gsap.fromTo('.hero-subtitle',
       { opacity: 0, y: 8, letterSpacing: '10px' },
-      { opacity: 1, y: 0, letterSpacing: '3px', duration: 0.9, delay: 1.1, ease: 'power3.out' }
+      { opacity: 1, y: 0, letterSpacing: '3px', duration: 0.9, delay: 0.6, ease: 'power3.out' }
     );
-    gsap.from('.gsap-word', {
-      opacity: 0, filter: 'blur(6px)', y: 18,
-      duration: 0.65, stagger: 0.07, delay: 1.5, ease: 'power2.out'
+    gsap.from('.hero h1', {
+      opacity: 0, y: 40, duration: 1.0, delay: 0.9, ease: 'power3.out'
     });
-    gsap.from('.hero p', { opacity: 0, y: 20, duration: 0.7, delay: 2.0, ease: 'power2.out' });
-    gsap.from('.hero-ctas', { opacity: 0, y: 20, duration: 0.7, delay: 2.2, ease: 'power2.out' });
+    gsap.from('.hero p', { opacity: 0, y: 20, duration: 0.7, delay: 1.3, ease: 'power2.out' });
+    gsap.from('.hero-ctas', { opacity: 0, y: 20, duration: 0.7, delay: 1.5, ease: 'power2.out' });
 
     // ── 3. HOURS & LOCATION — fly in from right, scrubbed ──
     gsap.fromTo('#hoursCard',
