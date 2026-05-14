@@ -138,6 +138,12 @@
       margin-top: 14px;
       opacity: 0;
     }
+    .hero-sub-mobile { display: none; line-height: 2; }
+    .hero-sub-desktop { display: inline; }
+    @media (max-width: 700px) {
+      .hero-sub-desktop { display: none; }
+      .hero-sub-mobile { display: block; }
+    }
     .hero h1 {
       font-family: 'Playfair Display', serif;
       font-size: clamp(2.4rem, 6vw, 4rem);
@@ -490,7 +496,10 @@
   <header class="hero">
     <div class="hero-logo-block">
       <img class="hero-logo-img" src="logo-assets/fishes and loaves update logo.png" alt="Fishes & Loaves">
-      <div class="hero-subtitle">Emergency Food Pantry &nbsp;·&nbsp; Colorado Springs, CO &nbsp;·&nbsp; Est. 2012</div>
+      <div class="hero-subtitle">
+        <span class="hero-sub-desktop">Emergency Food Pantry &nbsp;·&nbsp; Colorado Springs, CO &nbsp;·&nbsp; Est. 2012</span>
+        <span class="hero-sub-mobile">Emergency Food Pantry<br>Colorado Springs, CO<br>Est. 2012</span>
+      </div>
     </div>
     <h1>No one should go<br /><span>hungry in our community.</span></h1>
     <p>Fishes & Loaves provides emergency food assistance to families and individuals in need — no paperwork, no judgment, just help.</p>
