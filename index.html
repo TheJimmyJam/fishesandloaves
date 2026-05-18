@@ -765,20 +765,21 @@
         <div style="background:var(--white); border-radius:12px; padding:40px 36px; box-shadow: 0 2px 16px rgba(0,0,0,.07);">
           <h3 style="font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:6px; color:var(--dark);">Send Us a Message</h3>
           <p style="font-size:.9rem; color:var(--muted); margin-bottom:24px;">We'll do our best to respond within 1–2 days.</p>
-          <form onsubmit="handleSubmit(event)">
+          <form name="contact" method="POST" data-netlify="true" onsubmit="handleSubmit(event)">
+            <input type="hidden" name="form-name" value="contact" />
             <div style="margin-bottom:16px;">
               <label style="display:block; font-size:.85rem; font-weight:600; margin-bottom:6px; color:var(--dark);">Your Name</label>
-              <input type="text" placeholder="First & Last Name" required style="width:100%; padding:12px 14px; border:1.5px solid #DDD3C4; border-radius:6px; font-size:.95rem; font-family:inherit; outline:none;" onfocus="this.style.borderColor='#C8822A'" onblur="this.style.borderColor='#DDD3C4'" />
+              <input type="text" name="name" placeholder="First & Last Name" required style="width:100%; padding:12px 14px; border:1.5px solid #DDD3C4; border-radius:6px; font-size:.95rem; font-family:inherit; outline:none;" onfocus="this.style.borderColor='#C8822A'" onblur="this.style.borderColor='#DDD3C4'" />
             </div>
             <div style="margin-bottom:16px;">
               <label style="display:block; font-size:.85rem; font-weight:600; margin-bottom:6px; color:var(--dark);">Email Address</label>
-              <input type="email" placeholder="you@example.com" required style="width:100%; padding:12px 14px; border:1.5px solid #DDD3C4; border-radius:6px; font-size:.95rem; font-family:inherit; outline:none;" onfocus="this.style.borderColor='#C8822A'" onblur="this.style.borderColor='#DDD3C4'" />
+              <input type="email" name="email" placeholder="you@example.com" required style="width:100%; padding:12px 14px; border:1.5px solid #DDD3C4; border-radius:6px; font-size:.95rem; font-family:inherit; outline:none;" onfocus="this.style.borderColor='#C8822A'" onblur="this.style.borderColor='#DDD3C4'" />
             </div>
             <div style="margin-bottom:24px;">
               <label style="display:block; font-size:.85rem; font-weight:600; margin-bottom:6px; color:var(--dark);">Message</label>
-              <textarea rows="4" placeholder="I'd like to volunteer / donate / ask a question..." required style="width:100%; padding:12px 14px; border:1.5px solid #DDD3C4; border-radius:6px; font-size:.95rem; font-family:inherit; resize:vertical; outline:none;" onfocus="this.style.borderColor='#C8822A'" onblur="this.style.borderColor='#DDD3C4'"></textarea>
+              <textarea name="message" rows="4" placeholder="I'd like to volunteer / donate / ask a question..." required style="width:100%; padding:12px 14px; border:1.5px solid #DDD3C4; border-radius:6px; font-size:.95rem; font-family:inherit; resize:vertical; outline:none;" onfocus="this.style.borderColor='#C8822A'" onblur="this.style.borderColor='#DDD3C4'"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%; text-align:center; cursor:pointer; font-family:inherit;">Send Message</button>
+            <button type="submit" id="submit-btn" class="btn btn-primary" style="width:100%; text-align:center; cursor:pointer; font-family:inherit;">Send Message</button>
           </form>
           <div id="form-success" style="display:none; text-align:center; padding:24px; color:var(--green); font-weight:600;">
             ✅ Thanks! We'll be in touch soon.
@@ -806,11 +807,30 @@
       });
     });
 
-    // Contact form mock submit
+    // Contact form — submits to Netlify Forms
     function handleSubmit(e) {
       e.preventDefault();
-      e.target.style.display = 'none';
-      document.getElementById('form-success').style.display = 'block';
+      const form = e.target;
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      const data = new URLSearchParams(new FormData(form)).toString();
+
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: data
+      })
+        .then(() => {
+          form.style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.textContent = 'Send Message';
+          alert('Something went wrong. Please try again or email us directly.');
+        });
     }
 
     // Hamburger toggle
