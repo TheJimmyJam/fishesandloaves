@@ -429,6 +429,40 @@
     }
     footer strong { color: var(--light-gold); }
 
+    /* ── CUSTOM ICHTHYS CURSOR ── */
+    @media (pointer: fine) {
+      *, *::before, *::after { cursor: none !important; }
+    }
+    #cursor-ichthys {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99999;
+      width: 46px;
+      opacity: 0;
+    }
+
+    /* ── HERO FLOATING FISH ── */
+    .hero-fish {
+      position: absolute;
+      pointer-events: none;
+      top: 0; left: 0;
+    }
+
+    /* ── ABOUT CROSS ── */
+    .about-section { position: relative; }
+    #about-cross-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6%;
+    }
+    .about-inner { position: relative; z-index: 1; }
+
     /* ── MISSION QUOTE SECTION ── */
     .mission-quote-section {
       background: var(--warm-brown);
@@ -489,6 +523,15 @@
 </head>
 <body>
 
+  <!-- ICHTHYS CURSOR (desktop only) -->
+  <div id="cursor-ichthys" aria-hidden="true">
+    <svg viewBox="0 0 90 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8,27 C22,8 62,8 74,27 C62,46 22,46 8,27 Z" stroke="#C8822A" stroke-width="2.5" fill="rgba(200,130,42,0.2)"/>
+      <path d="M65,16 L83,27 L65,38" stroke="#C8822A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="24" cy="25" r="3.5" fill="#C8822A"/>
+    </svg>
+  </div>
+
   <!-- NAV -->
   <nav>
     <a class="nav-logo" href="#"><img src="logo-assets/fishes and loaves transparent.png" alt="Fishes & Loaves" style="height:40px; vertical-align:middle;"></a>
@@ -524,6 +567,8 @@
       <a href="#hours" class="btn btn-primary">Get Food This Saturday</a>
       <a href="#contact" class="btn btn-outline">Get in Touch</a>
     </div>
+    <!-- floating ichthys fish (populated by GSAP) -->
+    <div id="hero-fish-layer" aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
   </header>
 
   <!-- HOURS & LOCATION -->
@@ -559,6 +604,13 @@
 
   <!-- ABOUT -->
   <section id="about" class="about-section">
+    <!-- decorative cross — draws in on scroll -->
+    <div id="about-cross-wrap" aria-hidden="true">
+      <svg viewBox="0 0 100 160" width="130" height="208" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="cross-vert"  d="M50,0 L50,160"   stroke="rgba(200,130,42,0.18)" stroke-width="12" stroke-linecap="round"/>
+        <path id="cross-horiz" d="M5,50 L95,50"    stroke="rgba(200,130,42,0.18)" stroke-width="12" stroke-linecap="round"/>
+      </svg>
+    </div>
     <div class="container">
       <div class="about-inner">
         <div class="about-visual">
@@ -968,6 +1020,72 @@
       { y: 0, ease: 'none',
         scrollTrigger: { trigger: 'footer', start: 'top 95%', end: 'top 60%', scrub: 1 } }
     );
+
+    // ── 11. ICHTHYS CURSOR (desktop / fine-pointer only) ──
+    (function () {
+      const el = document.getElementById('cursor-ichthys');
+      if (!el || window.matchMedia('(pointer: coarse)').matches) return;
+      gsap.set(el, { xPercent: -50, yPercent: -50 });
+      const xTo = gsap.quickTo(el, 'x', { duration: 0.2, ease: 'power2.out' });
+      const yTo = gsap.quickTo(el, 'y', { duration: 0.2, ease: 'power2.out' });
+      document.addEventListener('mousemove', function (e) {
+        xTo(e.clientX);
+        yTo(e.clientY);
+        gsap.to(el, { opacity: 1, duration: 0.25, overwrite: true });
+      });
+      document.addEventListener('mouseleave', function () {
+        gsap.to(el, { opacity: 0, duration: 0.3, overwrite: true });
+      });
+    }());
+
+    // ── 12. FLOATING ICHTHYS FISH IN HERO ──
+    (function () {
+      const layer = document.getElementById('hero-fish-layer');
+      if (!layer) return;
+      const fishSVG = '<svg viewBox="0 0 90 54" fill="none" xmlns="http://www.w3.org/2000/svg">'
+        + '<path d="M8,27 C22,8 62,8 74,27 C62,46 22,46 8,27 Z" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" fill="rgba(255,255,255,0.07)"/>'
+        + '<path d="M65,16 L83,27 L65,38" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'
+        + '<circle cx="24" cy="25" r="3" fill="rgba(255,255,255,0.45)"/>'
+        + '</svg>';
+      var sizes = [24, 36, 20, 42, 28, 22, 38, 30];
+      for (var i = 0; i < 8; i++) {
+        var fish = document.createElement('div');
+        fish.className = 'hero-fish';
+        fish.innerHTML = fishSVG;
+        var s = sizes[i];
+        fish.style.width  = s + 'px';
+        fish.style.height = Math.round(s * 0.6) + 'px';
+        layer.appendChild(fish);
+        var startY     = 8  + Math.random() * 82;
+        var wobble     = (20 + Math.random() * 35) * (Math.random() > 0.5 ? 1 : -1);
+        var dur        = 18 + Math.random() * 14;
+        var delay      = i * 3 + Math.random() * 3;
+        gsap.set(fish, { x: -60, y: startY + '%', opacity: 0, scaleX: -1 });
+        gsap.timeline({ delay: delay, repeat: -1, repeatDelay: 2 + Math.random() * 5 })
+          .to(fish, { opacity: 0.38, duration: 1.5, ease: 'power1.in' })
+          .to(fish, { x: window.innerWidth + 60, y: '+=' + wobble, duration: dur, ease: 'none' }, '<')
+          .to(fish, { opacity: 0, duration: 2, ease: 'power1.out' }, '>-2');
+      }
+    }());
+
+    // ── 13. CROSS DRAW-ON IN ABOUT SECTION ──
+    (function () {
+      var v = document.getElementById('cross-vert');
+      var h = document.getElementById('cross-horiz');
+      if (!v || !h) return;
+      gsap.set(v, { strokeDasharray: 160, strokeDashoffset: 160 });
+      gsap.set(h, { strokeDasharray: 90,  strokeDashoffset: 90  });
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: '#about',
+          start: 'top 72%',
+          end:   'top 15%',
+          scrub: 1.8
+        }
+      })
+        .to(v, { strokeDashoffset: 0, ease: 'power1.inOut', duration: 1 })
+        .to(h, { strokeDashoffset: 0, ease: 'power1.inOut', duration: 0.65 }, '<0.35');
+    }());
   </script>
 </body>
 </html>
