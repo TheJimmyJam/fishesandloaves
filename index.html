@@ -430,16 +430,18 @@
     footer strong { color: var(--light-gold); }
 
     /* ── CUSTOM ICHTHYS CURSOR ── */
-    @media (pointer: fine) {
-      *, *::before, *::after { cursor: none !important; }
-    }
+    body.has-custom-cursor,
+    body.has-custom-cursor * { cursor: none !important; }
     #cursor-ichthys {
       position: fixed;
       top: 0; left: 0;
       pointer-events: none;
       z-index: 99999;
       width: 46px;
+      height: 28px;
       opacity: 0;
+      display: none;
+      transition: opacity 0.2s;
     }
 
     /* ── HERO FLOATING FISH ── */
@@ -1021,20 +1023,24 @@
         scrollTrigger: { trigger: 'footer', start: 'top 95%', end: 'top 60%', scrub: 1 } }
     );
 
-    // ── 11. ICHTHYS CURSOR (desktop / fine-pointer only) ──
+    // ── 11. ICHTHYS CURSOR (desktop only) ──
     (function () {
-      const el = document.getElementById('cursor-ichthys');
-      if (!el || window.matchMedia('(pointer: coarse)').matches) return;
-      gsap.set(el, { xPercent: -50, yPercent: -50 });
-      const xTo = gsap.quickTo(el, 'x', { duration: 0.2, ease: 'power2.out' });
-      const yTo = gsap.quickTo(el, 'y', { duration: 0.2, ease: 'power2.out' });
+      var el = document.getElementById('cursor-ichthys');
+      if (!el) return;
+      // Only activate on mouse devices (not touch)
+      var activated = false;
       document.addEventListener('mousemove', function (e) {
-        xTo(e.clientX);
-        yTo(e.clientY);
-        gsap.to(el, { opacity: 1, duration: 0.25, overwrite: true });
+        if (!activated) {
+          activated = true;
+          el.style.display = 'block';
+          document.body.classList.add('has-custom-cursor');
+        }
+        // Offset by half the element size so hotspot is at center
+        el.style.transform = 'translate(' + (e.clientX - 23) + 'px, ' + (e.clientY - 14) + 'px)';
+        el.style.opacity = '1';
       });
       document.addEventListener('mouseleave', function () {
-        gsap.to(el, { opacity: 0, duration: 0.3, overwrite: true });
+        el.style.opacity = '0';
       });
     }());
 
